@@ -1,0 +1,976 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="竹间">
+    <meta name="description" content="mysql 5.6.38 安装（redhat 6）本文只适用于通过 rpm 二进制的方式安装，使用源码安装的请自行百度。1. 准备步骤下载地址 ：https://dev.mysql.com/downloads/mysql/5.6.html
+">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>竹间</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+        code[class*="language-"], pre[class*="language-"] {
+            white-space: pre !important;
+        }
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">竹间</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>Index</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>Archives</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>About</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>Friends</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="Search"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">竹间</div>
+        <div class="logo-desc">
+            
+            什么都好，就是脑壳有点凉
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                Index
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                Archives
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                About
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                Friends
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/JerryDai90" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/JerryDai90" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">No tag</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2019-07-06
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>Word Count:&nbsp;&nbsp;
+                        2.2k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>Read Times:&nbsp;&nbsp;
+                        12 Min
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="mysql-5-6-38-安装（redhat-6）"><a href="#mysql-5-6-38-安装（redhat-6）" class="headerlink" title="mysql 5.6.38 安装（redhat 6）"></a>mysql 5.6.38 安装（redhat 6）</h1><pre><code>本文只适用于通过 rpm 二进制的方式安装，使用源码安装的请自行百度。</code></pre><h2 id="1-准备步骤"><a href="#1-准备步骤" class="headerlink" title="1. 准备步骤"></a>1. 准备步骤</h2><p>下载地址 ：<a href="https://dev.mysql.com/downloads/mysql/5.6.html" target="_blank" rel="noopener">https://dev.mysql.com/downloads/mysql/5.6.html</a></p>
+<p>只需要以下安装文件</p>
+<pre><code>MySQL-client*.rpm
+MySQL-devel*.rpm
+MySQL-server*.rpm </code></pre><p><strong>需要使用 root 的账号进行操作</strong></p>
+<h2 id="2-卸载"><a href="#2-卸载" class="headerlink" title="2. 卸载"></a>2. 卸载</h2><h3 id="2-1-卸载包"><a href="#2-1-卸载包" class="headerlink" title="2.1 卸载包"></a>2.1 卸载包</h3><p>找出所有已经安装的包</p>
+<pre><code>rpm -qa | grep -i mysql</code></pre><p>移除上面命令列出来的包</p>
+<pre><code>rpm -e pagename --nodeps
+
+参数 pagename 上面出现的包名
+参数 --nodeps 表示不检查依赖进行删除</code></pre><h3 id="2-2-删除文件"><a href="#2-2-删除文件" class="headerlink" title="2.2 删除文件"></a>2.2 删除文件</h3><p>查找 mysql 的文件</p>
+<pre><code>find / -name mysql</code></pre><p>删除</p>
+<pre><code>rm -rf folderORFileNamw</code></pre><h2 id="3-安装"><a href="#3-安装" class="headerlink" title="3 安装"></a>3 安装</h2><h3 id="3-1-安装软件"><a href="#3-1-安装软件" class="headerlink" title="3.1 安装软件"></a>3.1 安装软件</h3><p>依次执行</p>
+<pre><code>rpm -ivh MySQL-devel*.rpm
+rpm -ivh MySQL-client*.rpm
+rpm -ivh MySQL-server*.rpm </code></pre><p>安装输出的日志如下</p>
+<pre><code>[root@bogon MySQL-5.6.43-1.el7.x86_64.rpm-bundle]# rpm -ivh MySQL-devel-5.6.43-1.el7.x86_64.rpm 
+warning: MySQL-devel-5.6.43-1.el7.x86_64.rpm: Header V3 DSA/SHA1 Signature, key ID 5072e1f5: NOKEY
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:MySQL-devel-5.6.43-1.el7         ################################# [100%]
+[root@bogon MySQL-5.6.43-1.el7.x86_64.rpm-bundle]# rpm -ivh MySQL-client-5.6.43-1.el7.x86_64.rpm 
+warning: MySQL-client-5.6.43-1.el7.x86_64.rpm: Header V3 DSA/SHA1 Signature, key ID 5072e1f5: NOKEY
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:MySQL-client-5.6.43-1.el7        ################################# [100%]
+[root@bogon MySQL-5.6.43-1.el7.x86_64.rpm-bundle]# rpm -ivh MySQL-s
+MySQL-server-5.6.43-1.el7.x86_64.rpm         MySQL-shared-5.6.43-1.el7.x86_64.rpm         MySQL-shared-compat-5.6.43-1.el7.x86_64.rpm
+[root@bogon MySQL-5.6.43-1.el7.x86_64.rpm-bundle]# rpm -ivh MySQL-server-5.6.43-1.el7.x86_64.rpm 
+warning: MySQL-server-5.6.43-1.el7.x86_64.rpm: Header V3 DSA/SHA1 Signature, key ID 5072e1f5: NOKEY
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:MySQL-server-5.6.43-1.el7        ################################# [100%]
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+    LANGUAGE = (unset),
+    LC_ALL = (unset),
+    LC_CTYPE = &quot;UTF-8&quot;,
+    LANG = &quot;zh_CN.UTF-8&quot;
+    are supported and installed on your system.
+perl: warning: Falling back to the standard locale (&quot;C&quot;).
+2019-02-13 14:09:05 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2019-02-13 14:09:05 0 [Note] Ignoring --secure-file-priv value as server is running with --bootstrap.
+2019-02-13 14:09:05 0 [Note] /usr/sbin/mysqld (mysqld 5.6.43) starting as process 15754 ...
+2019-02-13 14:09:05 15754 [Note] InnoDB: Using atomics to ref count buffer pool pages
+2019-02-13 14:09:05 15754 [Note] InnoDB: The InnoDB memory heap is disabled
+2019-02-13 14:09:05 15754 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+2019-02-13 14:09:05 15754 [Note] InnoDB: Memory barrier is not used
+2019-02-13 14:09:05 15754 [Note] InnoDB: Compressed tables use zlib 1.2.11
+2019-02-13 14:09:05 15754 [Note] InnoDB: Using Linux native AIO
+2019-02-13 14:09:05 15754 [Note] InnoDB: Using CPU crc32 instructions
+2019-02-13 14:09:05 15754 [Note] InnoDB: Initializing buffer pool, size = 128.0M
+2019-02-13 14:09:05 15754 [Note] InnoDB: Completed initialization of buffer pool
+2019-02-13 14:09:05 15754 [Note] InnoDB: The first specified data file ./ibdata1 did not exist: a new database to be created!
+2019-02-13 14:09:05 15754 [Note] InnoDB: Setting file ./ibdata1 size to 12 MB
+2019-02-13 14:09:05 15754 [Note] InnoDB: Database physically writes the file full: wait...
+2019-02-13 14:09:05 15754 [Note] InnoDB: Setting log file ./ib_logfile101 size to 48 MB
+2019-02-13 14:09:06 15754 [Note] InnoDB: Setting log file ./ib_logfile1 size to 48 MB
+2019-02-13 14:09:07 15754 [Note] InnoDB: Renaming log file ./ib_logfile101 to ./ib_logfile0
+2019-02-13 14:09:07 15754 [Warning] InnoDB: New log files created, LSN=45781
+2019-02-13 14:09:07 15754 [Note] InnoDB: Doublewrite buffer not found: creating new
+2019-02-13 14:09:07 15754 [Note] InnoDB: Doublewrite buffer created
+2019-02-13 14:09:07 15754 [Note] InnoDB: 128 rollback segment(s) are active.
+2019-02-13 14:09:07 15754 [Warning] InnoDB: Creating foreign key constraint system tables.
+2019-02-13 14:09:07 15754 [Note] InnoDB: Foreign key constraint system tables created
+2019-02-13 14:09:07 15754 [Note] InnoDB: Creating tablespace and datafile system tables.
+2019-02-13 14:09:07 15754 [Note] InnoDB: Tablespace and datafile system tables created.
+2019-02-13 14:09:07 15754 [Note] InnoDB: Waiting for purge to start
+2019-02-13 14:09:07 15754 [Note] InnoDB: 5.6.43 started; log sequence number 0
+A random root password has been set. You will find it in &#39;/root/.mysql_secret&#39;.
+2019-02-13 14:09:08 15754 [Note] Binlog end
+2019-02-13 14:09:08 15754 [Note] InnoDB: FTS optimize thread exiting.
+2019-02-13 14:09:08 15754 [Note] InnoDB: Starting shutdown...
+2019-02-13 14:09:10 15754 [Note] InnoDB: Shutdown completed; log sequence number 1625977
+
+
+2019-02-13 14:09:10 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2019-02-13 14:09:10 0 [Note] Ignoring --secure-file-priv value as server is running with --bootstrap.
+2019-02-13 14:09:10 0 [Note] /usr/sbin/mysqld (mysqld 5.6.43) starting as process 15776 ...
+2019-02-13 14:09:10 15776 [Note] InnoDB: Using atomics to ref count buffer pool pages
+2019-02-13 14:09:10 15776 [Note] InnoDB: The InnoDB memory heap is disabled
+2019-02-13 14:09:10 15776 [Note] InnoDB: Mutexes and rw_locks use GCC atomic builtins
+2019-02-13 14:09:10 15776 [Note] InnoDB: Memory barrier is not used
+2019-02-13 14:09:10 15776 [Note] InnoDB: Compressed tables use zlib 1.2.11
+2019-02-13 14:09:10 15776 [Note] InnoDB: Using Linux native AIO
+2019-02-13 14:09:10 15776 [Note] InnoDB: Using CPU crc32 instructions
+2019-02-13 14:09:10 15776 [Note] InnoDB: Initializing buffer pool, size = 128.0M
+2019-02-13 14:09:10 15776 [Note] InnoDB: Completed initialization of buffer pool
+2019-02-13 14:09:10 15776 [Note] InnoDB: Highest supported file format is Barracuda.
+2019-02-13 14:09:10 15776 [Note] InnoDB: 128 rollback segment(s) are active.
+2019-02-13 14:09:10 15776 [Note] InnoDB: Waiting for purge to start
+2019-02-13 14:09:10 15776 [Note] InnoDB: 5.6.43 started; log sequence number 1625977
+2019-02-13 14:09:10 15776 [Note] Binlog end
+2019-02-13 14:09:10 15776 [Note] InnoDB: FTS optimize thread exiting.
+2019-02-13 14:09:10 15776 [Note] InnoDB: Starting shutdown...
+2019-02-13 14:09:12 15776 [Note] InnoDB: Shutdown completed; log sequence number 1625987
+
+
+
+
+A RANDOM PASSWORD HAS BEEN SET FOR THE MySQL root USER !
+You will find that password in &#39;/root/.mysql_secret&#39;.
+
+You must change that password on your first connect,
+no other statement but &#39;SET PASSWORD&#39; will be accepted.
+See the manual for the semantics of the &#39;password expired&#39; flag.
+
+Also, the account for the anonymous user has been removed.
+
+In addition, you can run:
+
+  /usr/bin/mysql_secure_installation
+
+which will also give you the option of removing the test database.
+This is strongly recommended for production servers.
+
+See the manual for more instructions.
+
+Please report any problems at http://bugs.mysql.com/
+
+The latest information about MySQL is available on the web at
+
+  http://www.mysql.com
+
+Support MySQL by buying support/licenses at http://shop.mysql.com
+
+WARNING: Found existing config file /usr/my.cnf on the system.
+Because this file might be in use, it was not replaced,
+but was used in bootstrap (unless you used --defaults-file)
+and when you later start the server.
+The new default config file was created as /usr/my-new.cnf,
+please compare it with your file and take the changes you need.</code></pre><p>root 密码在 <code>/root/.mysql_secret</code>, 可以使用命令查看密码 </p>
+<pre><code>cat /root/.mysql_secret</code></pre><p>此时安装完成后 mysql 已经自动启动。查看是否启动成功可以使用 <code>lsof -i:3306</code> 来查看。</p>
+<pre><code>如果没有启动，则说明安装失败了（或者使用 service mysql start 启动一下），需要看一下 `/var/lib/mysql/机器名称.err`，如果 /var/lib/mysql/ 什么都没有，没有 `mysql` 库，重新安装一下  `MySQL-server*.rpm ` 即可。下图是正常的</code></pre><p><img src="http://img.lsof.fun/2019-02-04-15482366261875.jpg" alt></p>
+<h3 id="3-2-配置-my-cnf"><a href="#3-2-配置-my-cnf" class="headerlink" title="3.2 配置 my.cnf"></a>3.2 配置 my.cnf</h3><p>使用命令 <code>find / -name my-default.cnf</code> 找到此文件。<br>复制配置文件到 <code>/etc/</code> 目录下</p>
+<pre><code>cp thisFilePath/my-default.cnf /etc/my.cnf</code></pre><p>编辑修改 my.cnf 文件，只需要修改以下配置</p>
+<pre><code> # mysql 安装的基础目录
+ basedir = /usr
+ # mysql 数据库文件目录（默认目录）
+ datadir = /var/lib/mysql
+ # 端口（可随意修改）
+ port = 3306
+ # 大小写忽略（用于表名、字段）
+ lower_case_table_names=1</code></pre><p>附上我的 my.cnf 配置</p>
+<pre><code># For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html
+# *** DO NOT EDIT THIS FILE. It&#39;s a template which will be copied to the
+# *** default location during install, and will be replaced if you
+# *** upgrade to a newer version of MySQL.
+
+[mysqld]
+
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+
+# These are commonly set, remove the # and set as required.
+ basedir = /usr
+ datadir = /var/lib/mysql
+ port = 3306
+# server_id = .....
+# socket = .....
+
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+ join_buffer_size = 128M
+ sort_buffer_size = 16M
+# read_rnd_buffer_size = 2M
+ lower_case_table_name = 1
+
+thread_cache_size = 16 
+query_cache_size = 128M
+max_connections = 3000 
+
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES 
+</code></pre><h3 id="3-3-root-密码修改和外部访问"><a href="#3-3-root-密码修改和外部访问" class="headerlink" title="3.3 root 密码修改和外部访问"></a>3.3 root 密码修改和外部访问</h3><pre><code>mysql -u root -p
+#输入 `/root/.mysql_secret` 中的密码登陆，这个时候会让你重置新密码
+
+mysql&gt; SET password=PASSWORD(&#39;新密码&#39;);
+mysql&gt; flush privileges;</code></pre><p>设置 root 可以在外面任何机器可以访问。</p>
+<pre><code>mysql&gt; use mysql;
+mysql&gt; GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;新密码&#39; WITH GRANT OPTION;
+mysql&gt; select host, user from user;
++-----------+--------+
+| host      | user   |
++-----------+--------+
+| %         | root   |
+| %         | root@% |
+| 127.0.0.1 | root   |
+| ::1       | root   |
+| bogon     | root   |
++-----------+--------+
+5 rows in set (0.00 sec)</code></pre><p>存在 <code>%         | root</code> 即可成功添加</p>
+<h2 id="4-备注"><a href="#4-备注" class="headerlink" title="4. 备注"></a>4. 备注</h2><p>以下为mysql 安装后的目录说明</p>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Contents of Directory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/usr/bin</td>
+<td>Client programs and scripts</td>
+</tr>
+<tr>
+<td>/usr/sbin</td>
+<td>The mysqld server</td>
+</tr>
+<tr>
+<td>/var/lib/mysql</td>
+<td>Log files, databases</td>
+</tr>
+<tr>
+<td>/usr/share/info</td>
+<td>Manual in Info format</td>
+</tr>
+<tr>
+<td>/usr/share/man</td>
+<td>Unix manual pages</td>
+</tr>
+<tr>
+<td>/usr/include/mysql</td>
+<td>Include (header) files</td>
+</tr>
+<tr>
+<td>/usr/lib/mysql</td>
+<td>Libraries</td>
+</tr>
+<tr>
+<td>/usr/share/mysql</td>
+<td>Miscellaneous support files, including error messages,character set files, sample configuration files, SQL for database installation</td>
+</tr>
+<tr>
+<td>/usr/share/sql-bench</td>
+<td>Benchmarks</td>
+</tr>
+</tbody></table>
+<h2 id="5-额外加餐"><a href="#5-额外加餐" class="headerlink" title="5. 额外加餐"></a>5. 额外加餐</h2><p>注意，window 下的文件夹路径需要注意，如果盘符后面是有转义的字符，需要加上2个反斜杠<br><img src="http://img.lsof.fun/2019-02-04-15492117790460.jpg" alt="-w500"></p>
+<h2 id="6-安装参考链接"><a href="#6-安装参考链接" class="headerlink" title="6. 安装参考链接"></a>6. 安装参考链接</h2><p><a href="http://blog.csdn.net/u010257584/article/details/51320542" target="_blank" rel="noopener">http://blog.csdn.net/u010257584/article/details/51320542</a></p>
+<p><a href="http://m.blog.itpub.net/26736162/viewspace-2135880/" target="_blank" rel="noopener">mysql my.cnf 说明</a><br><a href="https://blog.csdn.net/hrayha/article/details/46128731" target="_blank" rel="noopener">https://blog.csdn.net/hrayha/article/details/46128731</a></p>
+<p><a href="https://blog.csdn.net/hqmanwangkai/article/details/83225446" target="_blank" rel="noopener">https://blog.csdn.net/hqmanwangkai/article/details/83225446</a></p>
+<p><a href="https://www.cnblogs.com/cnblogsfans/archive/2009/09/21/1570942.html" target="_blank" rel="noopener">https://www.cnblogs.com/cnblogsfans/archive/2009/09/21/1570942.html</a></p>
+
+            </div>
+            <hr/>
+
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone, qq, weibo, douban"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>Reprint policy</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《》
+                </span> by
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/07/06/mysql-5.6.38-an-zhuang-redhat-6/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                Jerry dai
+            </a> is licensed under a
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">
+                Creative Commons Attribution 4.0 International License
+            </a> 
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: null,
+        id: '2019-07-06T23-13-06',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2019/07/07/ji-shang-che-shi-jian-2019-nian-6-yue-29-ri-zao-shang-7-dian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        
+                        <span class="card-title"></span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            记上车时间-2019年6月29日早上7点中国人对房子都一个蜜汁执着的追求，我们也不例外。我们也想考虑过上车，也想着一辈子租房也OK。
+
+何为上车，这一说如果没有记错的话是源于香港的房地产。也就是说买房就等于上车。
+
+1. 难上车的广州按年头
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2019-07-07
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            Jerry dai
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/04/23/java-illegal-character-65279/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        
+                        <span class="card-title"></span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            java: illegal character: \65279myeclipse 工程用 idea 导入的时候，会报以下错误。
+java: illegal character: \65279大概原因是因为在 window下面保存 BOM 格
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-04-23
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-user fa-fw"></i>
+                            Jerry dai
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://blinkfox.github.io/" target="_blank">Blinkfox</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 的
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>主题搭建.
+
+            
+                &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+                <span class="white-color">13.5k</span>
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/JerryDai90" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:jerrydai90@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=136023502" class="tooltipped" data-tooltip="QQ联系我: 136023502" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
